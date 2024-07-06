@@ -1,0 +1,48 @@
+{% extends "main/nav.html" %}
+{% block style %}
+<style>
+    .container {
+        width: 75%;
+        max-width: 1200px; /* Limit maximum width */
+        margin: auto; /* Center the container */
+    }
+
+    .greeting {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #2B6CB0; /* Blue color */
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            width: 100%; 
+            padding: 0 1rem; 
+        }
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="mt-20">
+    <div class="container mx-auto flex flex-col-reverse md:flex-row bg-white">
+        <!-- Image Section -->
+        <div class="w-full md:w-1/2 p-4 bg-white flex justify-center items-center">
+            <img class="w-full" src="{{ url_for('static', filename='images/52946.jpg') }}" alt="Gango f men">
+        </div>
+
+        <!-- Greeting Section -->
+        <div class="w-full md:w-1/2 p-4 bg-white rounded shadow-sm text-center md:my-auto">
+            <h2 class="greeting mb-4">Hi {{ current_user.first_name|upper }} {{ current_user.last_name|upper }}, Welcome to Futa Guide Portal!</h2>
+        </div>
+    </div>
+</div>
+
+<div class="mt-10 container mx-auto text-center">
+    <h2 class="text-3xl font-bold mb-8 mt-10">Daily Quotes</h2>
+    <div class="space-y-8">
+        <div class="md:text-3xl text-2xl font-semibold text-black">"Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful."</div>
+        <div class="text-2xl md:text-3xl font-semibold text-black">"Education is the most powerful weapon which you can use to change the world."</div>
+        <div class="text-2xl md:text-3xl font-semibold text-black">"The future belongs to those who believe in the beauty of their dreams."</div>
+    </div>
+</div>
+{% endblock content %}

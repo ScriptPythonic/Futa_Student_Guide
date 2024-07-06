@@ -1,0 +1,87 @@
+{% extends "main/nav.html" %}
+{% block style %}
+<style>
+    .step {
+        background-color: #f8fafc; /* Tailwind's gray-100 */
+        border: 1px solid #e5e7eb; /* Tailwind's gray-200 */
+        border-radius: 0.5rem; /* Tailwind's rounded-lg */
+        padding: 1.5rem; /* Tailwind's p-6 */
+        margin-bottom: 1.5rem; /* Tailwind's mb-6 */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Tailwind's shadow-lg */
+    }
+    .step img {
+        border-radius: 0.5rem; /* Tailwind's rounded-lg */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Tailwind's shadow-lg */
+    }
+</style>
+{% endblock style %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Student CGPA</h1>
+
+    <div class="bg-white shadow-md p-6 rounded-lg mb-6">
+        <h2 class="text-xl font-bold mb-2">Total Cumulative Grade Point Average</h2>
+        <p class="text-3xl text-blue-600 mb-4">3.75</p>
+        <p class="text-sm text-gray-600">Level 100 - Final Year</p>
+    </div>
+
+    <h1 class="text-3xl font-bold mb-6">Steps to Follow for Course Registration</h1>
+
+    <!-- Step 1 -->
+    <!-- Step 1 -->
+<div class="step flex flex-col md:flex-row items-center">
+    <div class="md:w-1/3 mb-4 md:mb-0">
+        <img src="{{ url_for('static', filename='images/IMG_1930.jpg') }}" alt="Visit Admission Office for Approval" class="w-full h-auto">
+    </div>
+    <div class="md:w-2/3 md:pl-6">
+        <h2 class="text-xl font-bold mb-2">Step 1: Login to Portal</h2>
+        <p>Log in to the student portal using your credentials. The portal is your primary gateway to all academic resources, course registrations, and personal information. Ensure that you have your login details handy. If you encounter any issues, please contact the university's IT support. Access the portal at the following link: <a href="https://firars.futa.edu.ng/app/welcome/appindex" class="text-blue-500">FUTA Undergraduate Portal</a>.</p>
+    </div>
+</div>
+
+
+    <!-- Step 2 -->
+    <div class="step flex flex-col md:flex-row items-center">
+        <div class="md:w-1/3 mb-4 md:mb-0">
+            <img src="{{ url_for('static', filename='images/IMG_1929.jpg') }}" alt="Navigate to Course Registration" class="w-full h-auto">
+        </div>
+        <div class="md:w-2/3 md:pl-6">
+            <h2 class="text-xl font-bold mb-2">Step 2: Navigate to Course Registration</h2>
+            <p>Proceed to the course registration section of the student portal. This section allows you to select and enroll in courses for the upcoming semester. Before you begin the registration process, ensure that all outstanding school fees have been paid. Registration will not be possible if there are any unpaid fees.</p>
+        </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step flex flex-col md:flex-row items-center">
+        <div class="md:w-1/3 mb-4 md:mb-0">
+            <img src="{{ url_for('static', filename='images/course_details_image.jpg') }}" alt="View Course Details" class="w-full h-auto">
+        </div>
+        <div class="md:w-2/3 md:pl-6">
+            <h2 class="text-xl font-bold mb-2">Step 3: View Course Details</h2>
+            <p>Review your registered courses. Any carry-over courses will be displayed in the outstanding box.</p>
+        </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step flex flex-col md:flex-row items-center">
+        <div class="md:w-1/3 mb-4 md:mb-0">
+            <img src="{{ url_for('static', filename='images/submit_button_image.jpg') }}" alt="Submit Course Registration" class="w-full h-auto">
+        </div>
+        <div class="md:w-2/3 md:pl-6">
+            <h2 class="text-xl font-bold mb-2">Step 4: Submit Course Registration</h2>
+            <p>Click on the submit button to finalize your course registration.</p>
+        </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step flex flex-col md:flex-row items-center">
+        <div class="md:w-1/3 mb-4 md:mb-0">
+            <img src="{{ url_for('static', filename='images/approval_image.jpg') }}" alt="Visit Admission Office for Approval" class="w-full h-auto">
+        </div>
+        <div class="md:w-2/3 md:pl-6">
+            <h2 class="text-xl font-bold mb-2">Step 5: Visit Admission Office for Approval</h2>
+            <p>After submitting, visit the admission office to get your course registration approved.</p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

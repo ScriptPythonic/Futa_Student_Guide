@@ -1,0 +1,260 @@
+{% extends "main/main.html" %}
+{% block content %}
+<div class="container mx-auto py-8 md:pt-20 ">
+        <h1 class="text-3xl font-semibold mb-6 mt-20">CGPA Calculator</h1>
+        <p class="mb-4 ">The CGPA Calculator is designed to help students quickly determine their overall GPA. By simply entering their semester GPAs, students can easily track their academic progress and identify areas for improvement. This tool simplifies the process of monitoring achievements and planning future studies.</p>
+
+        <!-- Form for CGPA input -->
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <h2 class="text-lg font-semibold mb-4">Enter CGPA for each semester and level</h2>
+            <form id="cgpaForm">
+                <!-- 100L Level -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="100L">100L</label>
+                    <div class="flex">
+                        <input type="number" class="form-input w-1/2 mr-2 border-b border-gray-300 focus:border-blue-500" id="100L_first" placeholder="First Semester CGPA..." step="0.01" min="0" max="5.0">
+                        <input type="number" class="form-input w-1/2 border-b border-gray-300 focus:border-blue-500" id="100L_second" placeholder="Second Semester CGPA..." step="0.01" min="0" max="5.0">
+                    </div>
+                </div>
+
+                <!-- 200L Level -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="200L">200L</label>
+                    <div class="flex">
+                        <input type="number" class="form-input w-1/2 mr-2 border-b border-gray-300 focus:border-blue-500" id="200L_first" placeholder="First Semester CGPA..." step="0.01" min="0" max="5.0">
+                        <input type="number" class="form-input w-1/2 border-b border-gray-300 focus:border-blue-500" id="200L_second" placeholder="Second Semester CGPA..." step="0.01" min="0" max="5.0">
+                    </div>
+                </div>
+
+                <!-- 300L Level -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="300L">300L</label>
+                    <div class="flex">
+                        <input type="number" class="form-input w-1/2 mr-2 border-b border-gray-300 focus:border-blue-500" id="300L_first" placeholder="First Semester CGPA..." step="0.01" min="0" max="5.0">
+                        <input type="number" class="form-input w-1/2 border-b border-gray-300 focus:border-blue-500" id="300L_second" placeholder="Second Semester CGPA..." step="0.01" min="0" max="5.0">
+                    </div>
+                </div>
+
+                <!-- 400L Level -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="400L">400L</label>
+                    <div class="flex">
+                        <input type="number" class="form-input w-1/2 mr-2 border-b border-gray-300 focus:border-blue-500" id="400L_first" placeholder="First Semester CGPA..." step="0.01" min="0" max="5.0">
+                        <input type="number" class="form-input w-1/2 border-b border-gray-300 focus:border-blue-500" id="400L_second" placeholder="Second Semester CGPA..." step="0.01" min="0" max="5.0">
+                    </div>
+                </div>
+
+                <!-- 500L Level -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="500L">500L</label>
+                    <div class="flex">
+                        <input type="number" class="form-input w-1/2 mr-2 border-b border-gray-300 focus:border-blue-500" id="500L_first" placeholder="First Semester CGPA..." step="0.01" min="0" max="5.0">
+                        <input type="number" class="form-input w-1/2 border-b border-gray-300 focus:border-blue-500" id="500L_second" placeholder="Second Semester CGPA..." step="0.01" min="0" max="5.0">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-4">
+                    <button type="button" onclick="calculateCGPA()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Calculate Total CGPA
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Total CGPA Display -->
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 hidden" id="totalCGPASection">
+            <h2 class="text-lg font-semibold mb-4">Total CGPA</h2>
+            <div id="totalCGPA" class="text-3xl font-bold"></div>
+        </div>
+    </div>
+
+
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-semibold mb-6">GPA Calculator </h1>
+        <p class="mb-3">The CGPA Calculator helps students quickly calculate their Cumulative Grade Point Average. By entering course grades and credit units, students can easily track their academic progress and identify areas for improvement. This tool simplifies monitoring achievements and planning future studies.</p>
+        <!-- Form for GPA input -->
+        <div class="bg-white shadow-md rounded px-1 md:px-8 pt-6 pb-8 mb-4">
+            <h2 class="text-lg font-semibold mb-4">Enter Course Units and Scores</h2>
+            <form id="gpaForm">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="py-2 px-4 border-b border-gray-300">Course Units (min: 1)</th>
+                                <th class="py-2 px-4 border-b border-gray-300">Score</th>
+                                <th class="py-2 px-4 border-b border-gray-300">Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gpaTableBody">
+                            <!-- Initial row -->
+                            <tr class="border-b border-gray-300">
+                                <td class="py-2 px-4"><input type="number" class="form-input w-full border-b border-gray-300 focus:border-blue-500 course-unit" placeholder="Course Units" min="1" step="1" required></td>
+                                <td class="py-2 px-4"><input type="number" class="form-input w-full border-b border-gray-300 focus:border-blue-500 score" placeholder="Score" min="0" max="100" required></td>
+                                <td class="py-2 px-4"><input type="text" class="form-input w-full border-b border-gray-300 focus:border-blue-500 grade" placeholder="Grade" readonly></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!-- Button to add more rows -->
+                <button type="button" id="addRowBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+                    Add Row
+                </button>
+    
+                <!-- Button to calculate GPA -->
+                <button type="button" onclick="calculateGPA()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    Calculate GPA
+                </button>
+            </form>
+        </div>
+    
+        <!-- GPA Display -->
+        <div id="gpaResult" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 hidden">
+            <h2 class="text-lg font-semibold mb-4">GPA Result</h2>
+            <div id="gpaValue" class="text-3xl font-bold"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Function to calculate total CGPA
+        function calculateCGPA() {
+            // Get all input elements
+            const inputs = document.querySelectorAll('.form-input');
+
+            let totalSum = 0;
+            let count = 0;
+
+            // Iterate over each input to calculate sum
+            inputs.forEach(input => {
+                const value = parseFloat(input.value);
+                if (!isNaN(value) && value >= 0 && value <= 5.0) {
+                    totalSum += value;
+                    count++;
+                }
+            });
+
+            // Calculate average CGPA
+            const averageCGPA = count > 0 ? (totalSum / count).toFixed(2) : 0;
+
+            // Display total CGPA
+            const totalCGPASection = document.getElementById('totalCGPASection');
+            const totalCGPAElement = document.getElementById('totalCGPA');
+
+            totalCGPAElement.textContent = averageCGPA;
+            totalCGPASection.classList.remove('hidden');
+        }
+    </script>
+
+
+    <script>
+        // Function to add a new row for course units and scores
+        document.getElementById('addRowBtn').addEventListener('click', function () {
+            const gpaTableBody = document.getElementById('gpaTableBody');
+    
+            // Create new row
+            const newRow = document.createElement('tr');
+            newRow.classList.add('border-b', 'border-gray-300');
+    
+            // Create course unit input
+            const courseUnitInput = document.createElement('input');
+            courseUnitInput.type = 'number';
+            courseUnitInput.classList.add('form-input', 'w-full', 'border-b', 'border-gray-300', 'focus:border-blue-500', 'course-unit');
+            courseUnitInput.placeholder = 'Course Units';
+            courseUnitInput.min = '1';
+            courseUnitInput.step = '1';
+            courseUnitInput.required = true;
+    
+            // Create score input
+            const scoreInput = document.createElement('input');
+            scoreInput.type = 'number';
+            scoreInput.classList.add('form-input', 'w-full', 'border-b', 'border-gray-300', 'focus:border-blue-500', 'score');
+            scoreInput.placeholder = 'Score';
+            scoreInput.min = '0';
+            scoreInput.max = '100';
+            scoreInput.required = true;
+    
+            // Create grade input (readonly)
+            const gradeInput = document.createElement('input');
+            gradeInput.type = 'text';
+            gradeInput.classList.add('form-input', 'w-full', 'border-b', 'border-gray-300', 'focus:border-blue-500', 'grade');
+            gradeInput.placeholder = 'Grade';
+            gradeInput.readOnly = true;
+    
+            // Append inputs to new row
+            const td1 = document.createElement('td');
+            td1.classList.add('py-2', 'px-4');
+            td1.appendChild(courseUnitInput);
+            newRow.appendChild(td1);
+    
+            const td2 = document.createElement('td');
+            td2.classList.add('py-2', 'px-4');
+            td2.appendChild(scoreInput);
+            newRow.appendChild(td2);
+    
+            const td3 = document.createElement('td');
+            td3.classList.add('py-2', 'px-4');
+            td3.appendChild(gradeInput);
+            newRow.appendChild(td3);
+    
+            // Append new row to table body
+            gpaTableBody.appendChild(newRow);
+        });
+    
+        // Function to calculate GPA
+        function calculateGPA() {
+            const courseUnitInputs = document.querySelectorAll('.course-unit');
+            const scoreInputs = document.querySelectorAll('.score');
+            const gradeInputs = document.querySelectorAll('.grade');
+    
+            let totalCredits = 0;
+            let weightedSum = 0;
+    
+            // Iterate over each input to calculate weighted sum and total credits
+            courseUnitInputs.forEach((courseUnitInput, index) => {
+                const courseUnit = parseFloat(courseUnitInput.value);
+                const score = parseFloat(scoreInputs[index].value);
+    
+                let gradePoint;
+    
+                // Determine grade point based on score
+                if (score >= 70) {
+                    gradePoint = 5;
+                } else if (score >= 60) {
+                    gradePoint = 4;
+                } else if (score >= 50) {
+                    gradePoint = 3;
+                } else if (score >= 45) {
+                    gradePoint = 2;
+                } else {
+                    gradePoint = 0;
+                }
+    
+                // Calculate weighted sum and total credits
+                if (!isNaN(courseUnit) && !isNaN(score) && courseUnit >= 1) {
+                    weightedSum += courseUnit * gradePoint;
+                    totalCredits += courseUnit;
+    
+                    // Display grade in corresponding input field
+                    gradeInputs[index].value = gradePoint;
+                }
+            });
+    
+            // Calculate GPA
+            if (totalCredits > 0) {
+                const gpa = (weightedSum / totalCredits).toFixed(2);
+    
+                // Display GPA result
+                const gpaResultSection = document.getElementById('gpaResult');
+                const gpaValueElement = document.getElementById('gpaValue');
+    
+                gpaValueElement.textContent = `GPA: ${gpa}`;
+                gpaResultSection.classList.remove('hidden');
+            } else {
+                alert('Please enter valid course units (min: 1) and scores.');
+            }
+        }
+    </script>
+    
+    
+{% endblock content %}
