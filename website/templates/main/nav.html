@@ -34,7 +34,7 @@
                             <a href="/" class="text-gray-900 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
                             <a href="/course_registration" class="text-gray-900 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Course Registration</a>
                             <a href="/grade_tracking" class="text-gray-900 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Grade Tracking</a>
-                            <a href="#" class="text-gray-900 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Academic Calendar</a>
+                            <a href="/doctor_medicals" class="text-gray-900 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Academic Calendar</a>
                             <a href="#" class="text-gray-900 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Campus Resources</a>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                 <a href="/" class="text-gray-900 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
                 <a href="/course_registration" class="text-gray-900 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Course Registration</a>
                 <a href="/grade_tracking" class="text-gray-900 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Grade Tracking</a>
-                <a href="#" class="text-gray-900 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Academic Calendar</a>
+                <a href="/doctor_medicals" class="text-gray-900 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Academic Calendar</a>
                 <a href="#" class="text-gray-900 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Campus Resources</a>
             </div>
         </div>
@@ -162,6 +162,7 @@
         </div>
     </div>
     {% block content %}{% endblock content %}
+    {% include "chat_bot/index.html" %}
     <footer class="bg-gray-900 text-white mt-20">
         <div class="container mx-auto py-8 px-4 ">
             <div class="flex flex-wrap justify-start gap-4">

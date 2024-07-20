@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futa Health Center Doctor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            border: 1px solid #ccc;
+        }
+        .chat-header {
+            background-color: #075E54;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            position: relative;
+        }
+        .back-button {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        .back-button img {
+            width: 24px;
+            height: 24px;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background:url('https://www.adamssensoryzones.ie/wp-content/uploads/2017/11/Specialist-Sensory-Rooms-Ireland.jpg');
+            background-size: cover;
+        }
+        .chat-input {
+            display: flex;
+            border-top: 1px solid #ccc;
+            background-color: #f0f0f0;
+            padding: 10px;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            margin-right: 10px;
+            background-color: white;
+        }
+        .chat-input button {
+            background-color: #075E54;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .message {
+            background-color: white;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 20px;
+            max-width: 60%;
+            word-wrap: break-word;
+        }
+        .sent {
+            align-self: flex-end;
+            background-color: #DCF8C6;
+        }
+        .received {
+            align-self: flex-start;
+            background-color: #FFF;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<div class="chat-container">
+    <div class="chat-header">
+        <button class="back-button" onclick="goBack()">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/left.png" alt="Back">
+        </button>
+        Futa Health Center Doctor
+    </div>
+    <div class="chat-messages" id="chat-messages">
+        <!-- Messages will appear here -->
+    </div>
+    <div class="chat-input">
+        <input type="text" id="userMessage" placeholder="Type a message..." required>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    function goBack() {
+        window.location.href = '/';
+    }
+    
+    const chatMessages = document.getElementById('chat-messages');
+
+    function sendMessage() {
+        const userMessage = document.getElementById('userMessage').value;
+
+        if (userMessage.trim()) {
+            addMessage(userMessage, 'sent');
+            document.getElementById('userMessage').value = '';
+
+            fetch('/medical', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status !== 'Message sent') {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error sending message');
+            });
+        }
+    }
+
+    function addMessage(message, type) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        messageElement.classList.add('message');
+        if (type === 'sent') {
+            messageElement.classList.add('sent');
+        } else {
+            messageElement.classList.add('received');
+        }
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+</script>
+
+</body>
+</html>

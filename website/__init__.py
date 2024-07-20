@@ -24,9 +24,11 @@ def create_app():
     # Import and register blueprints
     from .views import views
     from .auth import auth
+    from .telegram import teleg
     
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
+    app.register_blueprint(teleg, url_prefix='/')
 
     # Configure user loader
     from .models import User

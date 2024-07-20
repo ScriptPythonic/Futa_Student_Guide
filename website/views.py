@@ -18,4 +18,9 @@ def courses():
 @views.route('/grade_tracking',methods=['get'])
 def grade():
     return render_template('course_reg/grade.html')
+
+@views.route('/doctor_medicals',methods=['get'])
+def medicals():
+    return render_template('Medical/index.html')
+
     
