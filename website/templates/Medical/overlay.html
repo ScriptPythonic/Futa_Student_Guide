@@ -1,0 +1,113 @@
+<div id="overlay" class="overlay">
+    <div class="overlay-content">
+        <span class="close" onclick="hideOverlay()">&times;</span>
+        <div id="doctor-form">
+            <h2 class="text-2xl font-bold mb-4">Select a Doctor</h2>
+            <div class="space-y-4">
+                <!-- Doctor List -->
+                <div class="doctor-card flex items-center space-x-4 p-2 border rounded cursor-pointer" data-doctor="Dr. John Doe" onclick="selectDoctor(this)">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/50" alt="Dr. John Doe" class="rounded-full">
+                        <span class="active-badge"></span>
+                    </div>
+                    <span>Dr. John Doe</span>
+                </div>
+                <div class="doctor-card flex items-center space-x-4 p-2 border rounded cursor-pointer" data-doctor="Dr. Jane Smith" onclick="selectDoctor(this)">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/50" alt="Dr. Jane Smith" class="rounded-full">
+                        <span class="active-badge"></span>
+                    </div>
+                    <span>Dr. Jane Smith</span>
+                </div>
+                <div class="doctor-card flex items-center space-x-4 p-2 border rounded cursor-pointer" data-doctor="Dr. Emily Davis" onclick="selectDoctor(this)">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/50" alt="Dr. Emily Davis" class="rounded-full">
+                        <span class="active-badge"></span>
+                    </div>
+                    <span>Dr. Emily Davis</span>
+                </div>
+                <div class="doctor-card flex items-center space-x-4 p-2 border rounded cursor-pointer" data-doctor="Dr. Michael Brown" onclick="selectDoctor(this)">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/50" alt="Dr. Michael Brown" class="rounded-full">
+                        <span class="active-badge"></span>
+                    </div>
+                    <span>Dr. Michael Brown</span>
+                </div>
+            </div>
+            <button onclick="showCalendar()" class="bg-blue-500 text-white p-2 mt-4 rounded hover:bg-blue-600">Next</button>
+        </div>
+        <div id="calendar">
+            <h2 class="text-2xl font-bold mb-4">Select an Appointment Time</h2>
+            <div id="fullcalendar"></div>
+            <button onclick="hideOverlay()" class="bg-red-500 text-white p-2 mt-4 rounded hover:bg-red-600">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showOverlay() {
+        document.getElementById('overlay').style.display = 'flex';
+        setTimeout(() => {
+            document.getElementById('overlay').classList.add('active');
+        }, 10);
+    }
+
+    function hideOverlay() {
+        document.getElementById('overlay').classList.remove('active');
+        setTimeout(() => {
+            document.getElementById('overlay').style.display = 'none';
+        }, 300);
+    }
+
+    function selectDoctor(element) {
+        document.querySelectorAll('.doctor-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        element.classList.add('selected');
+    }
+
+    function showCalendar() {
+        const selectedDoctor = document.querySelector('.doctor-card.selected');
+        if (selectedDoctor) {
+            document.getElementById('doctor-form').classList.add('hidden');
+            document.getElementById('calendar').style.display = 'block';
+
+            $('#fullcalendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                events: [
+                    {
+                        title: 'Appointment with ' + selectedDoctor.dataset.doctor,
+                        start: '2023-07-29T10:00:00',
+                        end: '2023-07-29T12:00:00'
+                    },
+                    {
+                        title: 'Appointment with ' + selectedDoctor.dataset.doctor,
+                        start: '2023-07-30T14:00:00',
+                        end: '2023-07-30T16:00:00'
+                    }
+                ],
+                selectable: true,
+                selectHelper: true,
+                select: function (start, end) {
+                    const title = prompt('Confirm appointment:');
+                    if (title) {
+                        const eventData = {
+                            title: title,
+                            start: start,
+                            end: end
+                        };
+                        $('#fullcalendar').fullCalendar('renderEvent', eventData, true);
+                        hideOverlay();
+                    }
+                    $('#fullcalendar').fullCalendar('unselect');
+                }
+            });
+        } else {
+            alert('Please select a doctor.');
+        }
+    }
+</script>
