@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from dotenv import load_dotenv
 import os
-
+from werkzeug.security import generate_password_hash
 # Initialize the SQLAlchemy instance
 db = SQLAlchemy()
 
@@ -61,5 +61,18 @@ def create_app():
     # Create database tables if they do not exist
     with app.app_context():
         db.create_all()
+
+        # Create an admin user if it doesn't exist
+        if not User.query.filter_by(email='admin@example.com').first():
+            hashed_password =generate_password_hash('ScriptPythonic', method='scrypt')
+            admin = User(
+                email='admin@example.com',
+                first_name='Admin',
+                last_name='User',
+                password= hashed_password, 
+                role='admin'
+            )
+            db.session.add(admin)
+            db.session.commit()
     
-    return app
+    return app      
