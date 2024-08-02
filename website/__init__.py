@@ -9,6 +9,7 @@ from flask_login import LoginManager
 from dotenv import load_dotenv
 import os
 from werkzeug.security import generate_password_hash
+
 # Initialize the SQLAlchemy instance
 db = SQLAlchemy()
 
@@ -62,17 +63,36 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-        # Create an admin user if it doesn't exist
-        if not User.query.filter_by(email='admin@example.com').first():
-            hashed_password =generate_password_hash('ScriptPythonic', method='scrypt')
-            admin = User(
-                email='admin@example.com',
-                first_name='Admin',
-                last_name='User',
-                password= hashed_password, 
-                role='admin'
-            )
-            db.session.add(admin)
-            db.session.commit()
+        # Define initial admin and doctor users
+        initial_users = [
+            {
+                "email": "admin@example.com",
+                "first_name": "Admin",
+                "last_name": "User",
+                "password": "ScriptPythonic",
+                "role": "admin"
+            },
+            {
+                "email": "doctor@example.com",
+                "first_name": "Dr",
+                "last_name": "Animashaun",
+                "password": "Doctor123",
+                "role": "doctor"
+            }
+        ]
+
+        # Add initial users to the database
+        for user_data in initial_users:
+            if not User.query.filter_by(email=user_data["email"]).first():
+                hashed_password = generate_password_hash(user_data["password"], method='scrypt')
+                user = User(
+                    email=user_data["email"],
+                    first_name=user_data["first_name"],
+                    last_name=user_data["last_name"],
+                    password=hashed_password,
+                    role=user_data["role"]
+                )
+                db.session.add(user)
+                db.session.commit()
     
-    return app      
+    return app
