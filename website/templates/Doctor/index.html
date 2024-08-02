@@ -1,0 +1,58 @@
+<!-- doctor_message_list.html -->
+
+{% extends "Doctor/nav.html" %}
+
+{% block content %}
+<div class="bg-gray-100 h-screen flex flex-col pt-14">
+    <div class="flex-grow flex flex-col h-full">
+        <div id="messageList" class="flex-grow p-4 overflow-y-auto bg-white">
+            <!-- Message list will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchMessageList();
+        });
+
+        function fetchMessageList() {
+            const doctorId = 2; // Replace with the actual doctor ID
+
+            fetch(`/doctor/messages/list/${doctorId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageListDiv = document.getElementById('messageList');
+                messageListDiv.innerHTML = '';
+
+                // Display one message per sender
+                data.messages.forEach(message => {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('p-4', 'mb-2', 'border', 'rounded', 'bg-gray-200', 'cursor-pointer');
+                    messageElement.innerHTML = `
+                        <div class="font-bold">From: ${message.sender_name}</div>
+                        <div class="text-gray-700">${message.content}</div>
+                        <div class="text-sm text-gray-500">${message.timestamp}</div>
+                        ${message.last_sender_id === doctorId ? '<div class="text-green-500">✓ Replied</div>' : ''}
+                    `;
+                    messageElement.addEventListener('click', () => redirectToChatRoom(message.sender_id, message.sender_name));
+                    messageListDiv.appendChild(messageElement);
+                });
+
+                // Scroll to the bottom of the message list
+                messageListDiv.scrollTop = messageListDiv.scrollHeight;
+            })
+            .catch(error => console.error('Error fetching messages:', error));
+        }
+
+        function redirectToChatRoom(studentId, studentName) {
+            // Redirect to chat room
+            window.location.href = `/doctor/chat/${studentId}?name=${encodeURIComponent(studentName)}`;
+        }
+    </script>
+</div>
+{% endblock content %}

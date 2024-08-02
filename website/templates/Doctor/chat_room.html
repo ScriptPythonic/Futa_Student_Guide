@@ -1,0 +1,101 @@
+<!-- doctor_chat.html -->
+
+{% extends "Doctor/nav.html" %}
+
+{% block content %}
+<div class="bg-gray-100 h-screen flex flex-col pt-14">
+    <div class="flex-grow flex flex-col h-full">
+        <div id="messages" class="flex-grow p-4 overflow-y-auto bg-white">
+            {% for message in messages %}
+            <div class="p-2 mb-2 rounded max-w-xs mx-2 {% if message.sender_id == 2 %} bg-blue-500 text-white self-end {% else %} bg-gray-300 self-start {% endif %}">
+                <strong>{{ message.sender.first_name }}:</strong> {{ message.content }}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="p-4 bg-gray-200 flex items-center">
+            <textarea id="messageContent" class="flex-grow p-2 border rounded mr-4" placeholder="Type your message..."></textarea>
+            <button onclick="sendMessage()" class="p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                <i class="fas fa-paper-plane"></i> Send
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sendMessage() {
+        const messageContent = document.getElementById('messageContent').value;
+        const receiverId = {{ student_id }}; // The student's ID
+        const senderId = 2; // Replace with the doctor's actual ID
+
+        if (!messageContent) {
+            alert('Please enter a message.');
+            return;
+        }
+
+        fetch('/doctor/send_message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sender_id: senderId,
+                receiver_id: receiverId,
+                content: messageContent
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Clear the input field
+                document.getElementById('messageContent').value = '';
+                // Append the new message to the list
+                appendNewMessage(senderId, messageContent);
+            } else {
+                alert('Error sending message.');
+            }
+        });
+    }
+
+    function appendNewMessage(senderId, content) {
+        const messagesDiv = document.getElementById('messages');
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('p-2', 'mb-2', 'rounded', 'max-w-xs', 'mx-2', 'bg-blue-500', 'text-white', 'self-end');
+        messageElement.innerHTML = `<strong>You:</strong> ${content}`;
+        messagesDiv.appendChild(messageElement);
+
+        // Scroll to the bottom of the message list
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function fetchMessages() {
+        fetch(`/doctor/messages/list/{{ student_id }}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = ''; // Clear current messages
+
+            data.messages.forEach(message => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('p-2', 'mb-2', 'rounded', 'max-w-xs', 'mx-2');
+
+                if (message.sender_id == {{ student_id }}) {
+                    messageElement.classList.add('bg-gray-300', 'self-start');
+                } else {
+                    messageElement.classList.add('bg-blue-500', 'text-white', 'self-end');
+                }
+
+                messageElement.innerHTML = `<strong>${message.sender_name}:</strong> ${message.content}`;
+                messagesDiv.appendChild(messageElement);
+            });
+
+            // Scroll to the bottom of the message list
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        });
+    }
+</script>
+{% endblock content %}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <title>Doctor's Dashboard</title>
+    {% block style %}{% endblock style %}
+</head>
+<body>
+    <nav class="bg-blue-600 p-4 flex items-center justify-between">
+        <div class="flex items-center">
+            <img src="{{ url_for('static', filename='images/school_logo.png') }}" alt="School Logo" class="h-10 w-10 mr-4">
+            <span class="text-white text-lg font-bold">Doctor's Dashboard</span>
+        </div>
+        <div class="flex space-x-4">
+            <a href="/doctor/messages" class="text-white hover:text-gray-200">Messages</a>
+            <a href="/doctor/reports" class="text-white hover:text-gray-200">Reports</a>
+        </div>
+    </nav>
+    <div class="container mx-auto mt-4">
+        {% block content %}{% endblock content %}
+    </div>
+</body>
+</html>

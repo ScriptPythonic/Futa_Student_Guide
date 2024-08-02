@@ -1,0 +1,240 @@
+{% extends "Doctor/nav.html" %}
+{% block style %}
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                color: #333;
+                background-color: #f4f4f4;
+            }
+            .container {
+                width: 80%;
+                margin: 2rem auto;
+                padding: 2rem;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                background-color: #fff;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+            .header h1 {
+                margin: 0;
+                font-size: 1.5rem;
+                color: #2B6CB0;
+            }
+            .header p {
+                font-size: 1rem;
+                color: #666;
+            }
+            .section {
+                margin-bottom: 1rem;
+            }
+            .section h2 {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+                color: #2B6CB0;
+            }
+            .section p {
+                margin: 0.5rem 0;
+            }
+            .form-group {
+                margin-bottom: 1rem;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+            }
+            .form-group input, .form-group textarea {
+                width: 100%;
+                padding: 0.5rem;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .form-group button {
+                padding: 0.5rem 1rem;
+                background-color: #2B6CB0;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .form-group button:hover {
+                background-color: #1E4A9F;
+            }
+        </style>
+{% endblock style %}
+{% block content %}
+    <div class="container">
+        <div class="header">
+            <h1>FUTA University Health Center</h1>
+            <p>Student Medical Report Entry</p>
+        </div>
+
+        <form id="reportForm">
+            <!-- Student Registration Number -->
+            <div class="form-group">
+                <label for="regNumber">Student Registration Number:</label>
+                <input type="text" id="regNumber" name="regNumber" required>
+                <small id="regNumberError" style="color: red; display: none;">Registration number not found.</small>
+            </div>
+
+            <!-- Medical Report Information -->
+            <div id="reportFields" style="display: none;">
+                <!-- Student Information -->
+                <div class="section">
+                    <h2>Student Information</h2>
+                    <div class="form-group">
+                        <label for="studentName">Name:</label>
+                        <input type="text" id="studentName" name="studentName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of Birth:</label>
+                        <input type="date" id="dob" name="dob" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department:</label>
+                        <input type="text" id="department" name="department" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <input type="text" id="gender" name="gender" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bloodGroup">Blood Group:</label>
+                        <input type="text" id="bloodGroup" name="bloodGroup" required>
+                    </div>
+                </div>
+
+                <!-- Visit Details -->
+                <div class="section">
+                    <h2>Visit Details</h2>
+                    <div class="form-group">
+                        <label for="visitDate">Date of Visit:</label>
+                        <input type="date" id="visitDate" name="visitDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reasonVisit">Reason for Visit:</label>
+                        <textarea id="reasonVisit" name="reasonVisit" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Vital Signs -->
+                <div class="section">
+                    <h2>Vital Signs</h2>
+                    <div class="form-group">
+                        <label for="height">Height:</label>
+                        <input type="text" id="height" name="height" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight:</label>
+                        <input type="text" id="weight" name="weight" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bloodPressure">Blood Pressure:</label>
+                        <input type="text" id="bloodPressure" name="bloodPressure" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="temperature">Temperature:</label>
+                        <input type="text" id="temperature" name="temperature" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pulse">Pulse:</label>
+                        <input type="text" id="pulse" name="pulse" required>
+                    </div>
+                </div>
+
+                <!-- Examination Findings -->
+                <div class="section">
+                    <h2>Examination Findings</h2>
+                    <div class="form-group">
+                        <label for="findings">Findings:</label>
+                        <textarea id="findings" name="findings" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Diagnosis -->
+                <div class="section">
+                    <h2>Diagnosis</h2>
+                    <div class="form-group">
+                        <label for="diagnosis">Diagnosis:</label>
+                        <textarea id="diagnosis" name="diagnosis" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Treatment and Medications -->
+                <div class="section">
+                    <h2>Treatment and Medications</h2>
+                    <div class="form-group">
+                        <label for="treatment">Treatment:</label>
+                        <textarea id="treatment" name="treatment" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Doctor's Information -->
+                <div class="section">
+                    <h2>Doctor's Information</h2>
+                    <div class="form-group">
+                        <label for="doctorName">Doctor's Name:</label>
+                        <input type="text" id="doctorName" name="doctorName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit">Submit Report</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('regNumber').addEventListener('blur', function() {
+            const regNumber = this.value;
+
+            fetch(`/verify_registration/${regNumber}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        document.getElementById('reportFields').style.display = 'block';
+                        document.getElementById('regNumberError').style.display = 'none';
+                    } else {
+                        document.getElementById('reportFields').style.display = 'none';
+                        document.getElementById('regNumberError').style.display = 'block';
+                    }
+                });
+        });
+
+        document.getElementById('reportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch('/submit_medical_report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Medical report submitted successfully.');
+                    this.reset();
+                    document.getElementById('reportFields').style.display = 'none';
+                } else {
+                    alert('An error occurred while submitting the report.');
+                }
+            });
+        });
+    </script>
+{% endblock content %}
+
+
