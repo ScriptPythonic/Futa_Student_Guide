@@ -1,0 +1,135 @@
+{% extends "main/nav.html" %}
+{% block style %}
+    <style>
+        footer {
+            display: none;
+        }
+
+        .chat-icon {
+            display: none !important;
+        }
+
+        .message-user {
+            background-color: #e0f7fa; /* Light blue background for user messages */
+            color: #000;
+            text-align: right;
+            align-self: flex-end;
+        }
+
+        .message-doctor {
+            background-color: #f1f8e9; /* Light green background for doctor messages */
+            color: #000;
+            text-align: left;
+            align-self: flex-start;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+{% endblock style %}
+
+{% block content %}
+    <div class="bg-gray-100 h-screen flex flex-col pt-14">
+        <div class="flex-grow flex flex-col h-full">
+            <div id="messages" class="flex-grow p-4 overflow-y-auto bg-white">
+                <!-- Messages will be displayed here -->
+            </div>
+            <div class="p-4 bg-gray-200 flex items-center">
+                <textarea id="messageContent" class="flex-grow p-2 border rounded mr-4" placeholder="Type your message..."></textarea>
+                <button onclick="sendMessage()" class="p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Overlay Modal -->
+        <div id="overlay" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+            <div class="bg-white p-6 rounded shadow-lg text-center max-w-sm mx-auto">
+                <h3 class="text-xl font-semibold mb-4">Message Sent!</h3>
+                <p class="text-gray-700 mb-4">Your message has been received. We will let you know when the doctor replies. You can also type down all you have to say.</p>
+                <button onclick="closeOverlay()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none">
+                    Okay
+                </button>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                fetchMessages();
+            });
+
+            function fetchMessages() {
+                const userId = 1; // Replace with the actual user ID
+                fetch(`/messages`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const messagesDiv = document.getElementById('messages');
+                    messagesDiv.innerHTML = '';
+
+                    // Display all messages
+                    data.messages.forEach(message => {
+                        const messageElement = document.createElement('div');
+                        messageElement.classList.add('p-2', 'mb-2', 'rounded', 'max-w-xs', 'mx-2');
+                        
+                        if (message.sender_id === userId) {
+                            messageElement.classList.add('message-user');
+                        } else {
+                            messageElement.classList.add('message-doctor');
+                        }
+
+                        messageElement.innerHTML = `<strong>${message.sender_name}</strong>: ${message.content}`;
+                        messagesDiv.appendChild(messageElement);
+                    });
+
+                    // Scroll to the bottom of the messages
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                });
+            }
+
+            function sendMessage() {
+                const messageContent = document.getElementById('messageContent').value;
+                const receiverId = 2; // Replace with the actual receiver user ID
+
+                if (!messageContent) {
+                    alert('Please enter a message.');
+                    return;
+                }
+
+                fetch('/send_message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        receiver_id: receiverId,
+                        content: messageContent
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        document.getElementById('messageContent').value = '';
+                        fetchMessages();
+                        showOverlay();
+                    }
+                });
+            }
+
+            function showOverlay() {
+                const overlay = document.getElementById('overlay');
+                overlay.style.display = 'flex';
+            }
+
+            function closeOverlay() {
+                const overlay = document.getElementById('overlay');
+                overlay.style.display = 'none';
+            }
+        </script>
+    </div>
+{% endblock %}
