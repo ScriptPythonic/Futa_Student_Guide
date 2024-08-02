@@ -1,21 +1,16 @@
 """
-Models for the website.
+Models for the messaging platform between students and doctors.
 
 Author: ScriptPythonic
 Date: 2024-07-26
 
-This module contains the definition of the `User` model, which represents users in the application.
+This module contains the definition of the `User` and `Message` models.
 It uses Flask-Login for user session management and SQLAlchemy for database interactions.
 """
 
 from flask_login import UserMixin
 from sqlalchemy import func
-from sqlalchemy.orm import DeclarativeMeta
 from . import db
-
-# Type hint for db.Model and UserMixin
-UserMixinType = UserMixin  # Type for Flask-Login UserMixin
-DBModelType = DeclarativeMeta  # Type for SQLAlchemy db.Model
 
 class User(UserMixin, db.Model):
     """
@@ -33,10 +28,7 @@ class User(UserMixin, db.Model):
         cgpa (str): Current CGPA of the user.
         password (str): Hashed password for user authentication.
         google_id (str): Google ID for users who log in via Google, can be null.
-
-    Methods:
-        __repr__(): Returns a string representation of the user.
-        authenticate(email, password): Class method to authenticate users by email and password.
+        role (str): Role of the user, either 'student' or 'doctor'.
     """
     
     id = db.Column(db.Integer, primary_key=True)
@@ -47,23 +39,85 @@ class User(UserMixin, db.Model):
     cgpa = db.Column(db.String(150))
     password = db.Column(db.String(150))
     google_id = db.Column(db.String(150), unique=True, nullable=True)
+    role = db.Column(db.String(50), nullable=False, default='student')
     
-    def __repr__(self) -> str:
+    def __repr__(self):
         """
-        Returns a string representation of the user object, which includes the user's email.
+        Returns a string representation of the user object.
         """
         return f'<User {self.email}>'
 
-    @classmethod
-    def authenticate(cls, email: str, password: str) -> 'User':
-        """
-        Authenticates a user based on their email and password.
+class Message(db.Model):
+    """
+    Represents a message between a student and a doctor.
 
-        Args:
-            email (str): The user's email address.
-            password (str): The user's password.
+    Author: ScriptPythonic
+    Date: 2024-07-26
 
-        Returns:
-            User: The user object if authentication is successful, otherwise None.
+    Attributes:
+        id (int): Primary key for the message.
+        sender_id (int): ID of the user who sent the message.
+        receiver_id (int): ID of the user who received the message.
+        content (str): Content of the message.
+        timestamp (datetime): Time the message was sent.
+    """
+    
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, server_default=func.now())
+    
+    # Define relationships and specify foreign keys
+    sender = db.relationship('User', foreign_keys=[sender_id], backref='sent_messages', lazy=True)
+    receiver = db.relationship('User', foreign_keys=[receiver_id], backref='received_messages', lazy=True)
+
+    def __repr__(self):
         """
-        return cls.query.filter(func.lower(cls.email) == func.lower(email), cls.password == password).first()
+        Returns a string representation of the message object.
+        """
+        return f'<Message from {self.sender_id} to {self.receiver_id} at {self.timestamp}>'
+
+
+
+
+class Complaint(db.Model):
+    """
+    Represents a complaint made by a student.
+
+    Author: ScriptPythonic
+    Date: 2024-07-26
+
+    Attributes:
+        id (int): Primary key for the complaint.
+        user_id (int): ID of the user making the complaint.
+        content (str): Content of the complaint.
+        timestamp (datetime): Time the complaint was made.
+    """
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, server_default=func.now())
+
+    def __repr__(self) -> str:
+        """
+        Returns a string representation of the complaint object.
+        """
+        return f'<Complaint by {self.user_id} at {self.timestamp}>'
+    
+class MedicalReport(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date_of_visit = db.Column(db.Date, nullable=False)
+    reason_for_visit = db.Column(db.String(255), nullable=False)
+    height = db.Column(db.String(10), nullable=False)
+    weight = db.Column(db.String(10), nullable=False)
+    blood_pressure = db.Column(db.String(20), nullable=False)
+    temperature = db.Column(db.String(10), nullable=False)
+    pulse = db.Column(db.String(10), nullable=False)
+    findings = db.Column(db.Text, nullable=False)
+    diagnosis = db.Column(db.Text, nullable=False)
+    treatment = db.Column(db.Text, nullable=False)
+    doctor_name = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.Date, nullable=False)
